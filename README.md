@@ -8,7 +8,7 @@ Everything is free and local: OSC to 127.0.0.1, no API keys, no cloud.
   psonic-based `/run-code` was silently dropped. This fork reads the spider server's port and
   token from its process arguments and talks to it directly with python-osc. psonic is gone.
 - **`record_to_mp3` tool.** Records Sonic Pi's main output and saves an **.mp3** (no .rb) into
-  `~/AiMusic` (override with the `AIMUSIC_DIR` env var). The Sonic Pi source is embedded in the
+  `~/Documents/AiMusic` (override with the `AIMUSIC_DIR` env var). The Sonic Pi source is embedded in the
   MP3's lyrics ID3 tag so it stays editable. With `loop_seconds` set it records two cycles and
   keeps the second, so the reverb tail wraps and the loop is seamless.
 - `mcp` is pinned `<2` (mcp 2.x removed `mcp.server.fastmcp`).
@@ -21,7 +21,7 @@ Start Sonic Pi first, then, from the folder containing this fork:
     brew install uv        # if you don't have uv (free)
     claude mcp add sonic-pi -- uvx --from "$PWD" mcp-sonic-pi
     # optional: custom output folder
-    claude mcp add sonic-pi -e AIMUSIC_DIR="$HOME/AiMusic" -- uvx --from "$PWD" mcp-sonic-pi
+    claude mcp add sonic-pi -e AIMUSIC_DIR="$HOME/Documents/AiMusic" -- uvx --from "$PWD" mcp-sonic-pi
 
 ## Notes
 - Sonic Pi must be running (the app, not just the server) when a tool is called.

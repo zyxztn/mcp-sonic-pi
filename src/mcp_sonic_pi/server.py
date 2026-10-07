@@ -9,7 +9,7 @@ Changes from upstream (Apache-2.0):
   * Finds the spider server's port and token from its command line (the daemon
     only logs them on exit).
   * New record_to_mp3 tool: records Sonic Pi's main output, encodes MP3 with
-    lameenc (free, local) and saves it into AIMUSIC_DIR (default ~/AiMusic).
+    lameenc (free, local) and saves it into AIMUSIC_DIR (default ~/Documents/AiMusic).
 
 Everything is local: OSC to 127.0.0.1 only, no API keys, no cloud services.
 """
@@ -28,7 +28,7 @@ from pythonosc.udp_client import SimpleUDPClient
 
 mcp = FastMCP("sonic-pi")
 
-AIMUSIC_DIR = Path(os.environ.get("AIMUSIC_DIR", "~/AiMusic")).expanduser()
+AIMUSIC_DIR = Path(os.environ.get("AIMUSIC_DIR", "~/Documents/AiMusic")).expanduser()
 
 _SPIDER_RE = re.compile(
     r"spider-server\.rb\s+-u\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)"
