@@ -1,19 +1,18 @@
 [project]
 name = "mcp-sonic-pi"
-version = "0.1.0"
-description = "MCP server for Sonic Pi"
+version = "0.2.0"
+description = "MCP server for Sonic Pi 5 (fork): token-aware OSC and MP3 recording"
 requires-python = ">=3.10"
 authors = [
     {name = "Vinayak Mehta", email = "vmehta94@gmail.com"},
 ]
 dependencies = [
-    "mcp>=0.1.0",
-    "python-dotenv>=1.0.0",
-    "fastapi>=0.109.0",
-    "uvicorn>=0.27.0",
+    "mcp>=1.2.0,<2",
     "python-osc>=1.9.3",
-    "python-sonic>=0.4.4",
-    "ruff>=0.11.2",
+    "numpy>=1.26",
+    "soundfile>=0.12.1",
+    "lameenc>=1.7.0",
+    "mutagen>=1.47",
 ]
 readme = "README.md"
 license = {text = "Apache-2.0"}
