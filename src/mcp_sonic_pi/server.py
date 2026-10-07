@@ -153,6 +153,7 @@ def _encode_mp3(
     wav_path: Path,
     mp3_path: Path,
     loop_seconds: float | None,
+    trim_silence: bool,
     title: str,
     code: str,
     embed_code: bool,
@@ -184,7 +185,13 @@ def _encode_mp3(
         data = data[start : start + n]
     else:
         data = data[max(onset - int(0.02 * rate), 0) :]
-        fade = min(int(0.05 * rate), len(data))
+        if trim_silence:
+            loud = np.flatnonzero(np.abs(data).max(axis=1) > 0.006)
+            if loud.size:
+                data = data[: min(int(loud[-1]) + int(0.1 * rate), len(data))]
+            top = float(np.abs(data).max()) or 1.0
+            data = data * (0.89 / top)  # sound effects: normalize to about -1 dBFS
+        fade = min(int(0.12 * rate if trim_silence else 0.05 * rate), len(data))
         if fade:
             data[-fade:] *= np.linspace(1.0, 0.0, fade, dtype="float32")[:, None]
 
@@ -224,6 +231,7 @@ async def record_to_mp3(
     seconds: float = 30.0,
     loop_seconds: float = 0.0,
     tail_seconds: float = 2.0,
+    trim_silence: bool = False,
     embed_code: bool = True,
     ctx: Context | None = None,
 ) -> str:
@@ -241,6 +249,8 @@ async def record_to_mp3(
             Needs the piece to make a sound on its first downbeat.
         tail_seconds: One-shot takes only: extra seconds recorded after the code is
             stopped so reverb/release tails are not cut off.
+        trim_silence: One-shot takes only: cut the silence after the sound dies away
+            (use for sound effects).
         embed_code: Embed the source in the MP3 tags.
 
     Returns:
@@ -299,7 +309,7 @@ async def record_to_mp3(
                     "log for errors in the code."
                 )
             info = await asyncio.to_thread(
-                _encode_mp3, wav_path, mp3_path, loop, stem, code, embed_code
+                _encode_mp3, wav_path, mp3_path, loop, trim_silence, stem, code, embed_code
             )
         except ImportError as e:
             return f"Error: missing audio dependency ({e}). Reinstall the fork."
